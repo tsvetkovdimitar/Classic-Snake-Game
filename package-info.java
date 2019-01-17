@@ -1,0 +1,8 @@
+/**
+ * 
+ */
+/**
+ * @author dimitar
+ *
+ */
+package snakegame;
