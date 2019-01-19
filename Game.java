@@ -6,6 +6,7 @@ import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
+import java.util.Random;
 
 import javax.swing.JPanel;
 
@@ -25,6 +26,12 @@ public class Game extends JPanel implements Runnable, KeyListener {
 	
 	private ArrayList<BodyPart> snake;
 	
+	private Fruit fruit;
+	
+	private ArrayList<Fruit> fruits;
+	
+	private Random r;
+	
 	private int x = 10, y = 10, size = 5;
 	
 	private int ticks = 0;
@@ -37,6 +44,9 @@ public class Game extends JPanel implements Runnable, KeyListener {
 		addKeyListener(this);
 		
 		snake = new ArrayList<BodyPart>();
+		fruits = new ArrayList<Fruit>();
+		
+		r = new Random();
 		
 		start();
 		
@@ -109,6 +119,51 @@ public class Game extends JPanel implements Runnable, KeyListener {
 				
 			}
 		}
+		
+		if(fruits.size() == 0){
+			
+			int x = r.nextInt(49);
+			int y = r.nextInt(49);
+			
+			fruit = new Fruit(x, y, 10);
+			fruits.add(fruit);
+			
+		}
+		
+		for(int i = 0; i < fruits.size(); i++){
+			
+			if(x == fruits.get(i).getX() && y == fruits.get(i).getY()){
+				
+				size++;
+				fruits.remove(i);
+				i++;
+			}
+			
+		}
+		
+		//Snake body collision
+		for(int i = 0; i < snake.size(); i++){
+			
+			if(x == snake.get(i).getX() && y == snake.get(i).getY()){
+				
+				if(i != snake.size()-1){
+					
+					System.out.println("Game Over!");
+					stop();
+					
+				}
+				
+			}
+			
+		}
+		
+		//Border collision
+		if(x < 0 || x > 49 || y < 0 || y > 49){
+			
+			System.out.println("Game Over!");
+			stop();
+			
+		}
 	}
 	
 	public void paint(Graphics g){
@@ -133,6 +188,12 @@ public class Game extends JPanel implements Runnable, KeyListener {
 		for(int i = 0; i < snake.size();i++){
 			
 			snake.get(i).draw(g);
+			
+		}
+		
+		for(int i = 0; i < fruits.size(); i++){
+			
+			fruits.get(i).draw(g);
 			
 		}
 		
